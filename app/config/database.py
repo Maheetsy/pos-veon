@@ -1,23 +1,21 @@
-﻿import os
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.pool import NullPool
 
-# URL de conexion desde variable de entorno
-# IMPORTANTE: Nunca hardcodear credenciales en el codigo
-# Configurar DATABASE_URL en el archivo .env o en las variables de entorno del sistema
-# En Render: Configurar DATABASE_URL en el dashboard (Environment Variables)
-DATABASE_URL = os.getenv("DATABASE_URL")
+# ✅ Cargar variables del archivo .env
+load_dotenv()
 
-if not DATABASE_URL:
-    raise ValueError(
-        "DATABASE_URL no esta configurada. "
-        "Por favor, configura la variable de entorno DATABASE_URL en tu archivo .env o en el sistema. "
-        "Ejemplo: postgresql://usuario:contraseña@host:puerto/nombre_bd"
-    )
+# ✅ URL de conexión desde variable de entorno o valor por defecto
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://postgres:admin@localhost:5432/tienda_pos"
+)
 
-# Configuracion del engine para produccion
-# En produccion, usar pool de conexiones
+print("DATABASE_URL USADA:", DATABASE_URL)  # 👈 debug temporal
+
+# ✅ Configuración del engine
 if os.getenv("ENVIRONMENT") == "production":
     engine = create_engine(
         DATABASE_URL,
@@ -29,10 +27,8 @@ else:
     engine = create_engine(DATABASE_URL, poolclass=NullPool)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
-# Dependencia para obtener la DB en cada peticion (Dependency Injection)
 def get_db():
     db = SessionLocal()
     try:

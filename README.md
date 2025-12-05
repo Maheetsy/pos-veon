@@ -5,7 +5,7 @@ Microservicio REST desarrollado con FastAPI y PostgreSQL para la gestión de inv
 ## 🚀 Características
 
 - ✅ Gestión completa de productos y categorías
-- ✅ Autenticación JWT con roles (admin/usuario)
+- ✅ API pública sin autenticación requerida
 - ✅ Validaciones de integridad de datos (SKU único, stock no negativo, categoría existente)
 - ✅ Arquitectura por capas (Routers → Services → Repositories → Models)
 - ✅ Integridad referencial con ON DELETE SET NULL
@@ -100,55 +100,28 @@ docker build -t pos-products-service .
 docker run -p 8000:8000 -e DATABASE_URL=postgresql://user:pass@host:5432/dbname pos-products-service
 ```
 
-## 🔐 Autenticación
-
-### Obtener Token JWT
-
-```bash
-POST /auth/login
-Content-Type: application/json
-
-{
-  "username": "admin",
-  "password": "admin123"
-}
-```
-
-**Usuarios de prueba:**
-- **Admin**: username=`admin`, password=`admin123` (permisos completos)
-- **Usuario**: username=`user`, password=`user123` (solo lectura)
-
-### Usar el Token
-
-Incluir el token en el header de las peticiones:
-```
-Authorization: Bearer <token>
-```
-
 ## 📚 Endpoints
 
-### Autenticación
-
-- `POST /auth/login` - Obtener token JWT
+**Nota:** Todos los endpoints son públicos y no requieren autenticación.
 
 ### Categorías
 
-- `GET /categories/` - Listar todas las categorías (requiere autenticación)
-- `GET /categories/{id}` - Obtener categoría por ID (requiere autenticación)
-- `POST /categories/` - Crear categoría (requiere rol admin)
-- `PUT /categories/{id}` - Actualizar categoría (requiere rol admin)
-- `DELETE /categories/{id}` - Eliminar categoría (requiere rol admin)
+- `GET /categories/` - Listar todas las categorías
+- `GET /categories/{id}` - Obtener categoría por ID
+- `POST /categories/` - Crear categoría
+- `PUT /categories/{id}` - Actualizar categoría
+- `DELETE /categories/{id}` - Eliminar categoría
 
 ### Productos
 
-- `GET /products/` - Listar todos los productos (requiere autenticación)
-- `GET /products/{id}` - Obtener producto por ID (requiere autenticación)
-- `GET /products/search/query` - Buscar productos por nombre, SKU o categoría (requiere autenticación)
-- `POST /products/` - Crear producto (requiere rol admin)
-- `PUT /products/{id}` - Actualizar producto (requiere rol admin)
-- `PATCH /products/{id}/stock` - Actualizar stock directamente (requiere rol admin)
+- `GET /products/` - Listar todos los productos
+- `GET /products/{id}` - Obtener producto por ID
+- `GET /products/search/query` - Buscar productos por nombre, SKU o categoría
+- `POST /products/` - Crear producto
+- `PUT /products/{id}` - Actualizar producto
+- `PATCH /products/{id}/stock` - Actualizar stock directamente
 - `POST /products/{id}/decrease-stock` - Descontar stock (usado por servicio de ventas)
-- `DELETE /products/{id}` - Eliminar producto (requiere rol admin)
+- `DELETE /products/{id}` - Eliminar producto
 
 ## 🗄️ Modelo de Datos
 

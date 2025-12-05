@@ -11,24 +11,21 @@ from app.schemas.product_schema import (
     ProductSearch
 )
 from app.schemas.stock_schema import DecreaseStockRequest
-from app.auth.jwt_handler import require_admin, require_auth
 
 router = APIRouter(prefix="/products", tags=["Productos"])
 
 @router.post("/", response_model=ProductResponse, status_code=201)
 def create_product(
     product: ProductCreate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    db: Session = Depends(get_db)
 ):
-    """Crear un nuevo producto (requiere rol administrador)"""
+    """Crear un nuevo producto"""
     service = ProductService(db)
     return service.create(product)
 
 @router.get("/", response_model=List[ProductResponse])
 def get_all_products(
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_auth)
+    db: Session = Depends(get_db)
 ):
     """Consultar todos los productos"""
     service = ProductService(db)
@@ -37,8 +34,7 @@ def get_all_products(
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product_by_id(
     product_id: int,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_auth)
+    db: Session = Depends(get_db)
 ):
     """Consultar producto por ID"""
     service = ProductService(db)
@@ -49,8 +45,7 @@ def search_products(
     name: Optional[str] = Query(None, description="Buscar por nombre"),
     sku: Optional[str] = Query(None, description="Buscar por SKU"),
     category_id: Optional[int] = Query(None, description="Buscar por categoría"),
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_auth)
+    db: Session = Depends(get_db)
 ):
     """Buscar productos por nombre, SKU o categoría"""
     service = ProductService(db)
@@ -65,10 +60,9 @@ def search_products(
 def update_product(
     product_id: int,
     product: ProductUpdate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    db: Session = Depends(get_db)
 ):
-    """Editar producto (requiere rol administrador)"""
+    """Editar producto"""
     service = ProductService(db)
     return service.update(product_id, product)
 
@@ -76,10 +70,9 @@ def update_product(
 def update_stock(
     product_id: int,
     stock_update: StockUpdate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    db: Session = Depends(get_db)
 ):
-    """Actualizar stock de manera directa (requiere rol administrador)"""
+    """Actualizar stock de manera directa"""
     service = ProductService(db)
     return service.update_stock(product_id, stock_update)
 
@@ -87,8 +80,7 @@ def update_stock(
 def decrease_stock(
     product_id: int,
     request: DecreaseStockRequest,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_auth)
+    db: Session = Depends(get_db)
 ):
     """Descontar stock de un producto (usado por el servicio de ventas)"""
     service = ProductService(db)
@@ -97,9 +89,8 @@ def decrease_stock(
 @router.delete("/{product_id}", status_code=200)
 def delete_product(
     product_id: int,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    db: Session = Depends(get_db)
 ):
-    """Eliminar producto (requiere rol administrador)"""
+    """Eliminar producto"""
     service = ProductService(db)
     return service.delete(product_id)

@@ -65,3 +65,4 @@ if ($LASTEXITCODE -eq 0) {
 # Limpiar variable de entorno
 Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
 
+

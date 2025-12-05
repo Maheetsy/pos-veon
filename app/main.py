@@ -4,7 +4,6 @@ from app.config.database import Base, engine
 from app.models.category_model import Category
 from app.models.product_model import Product
 from app.routers import product_router, category_router
-from app.auth.auth_router import router as auth_router
 
 # Crear las tablas en la BD si no existen
 Base.metadata.create_all(bind=engine)
@@ -17,18 +16,14 @@ app = FastAPI(
     ## Características
     
     * Gestión completa de productos y categorías
-    * Autenticación JWT con roles (admin/usuario)
     * Validaciones de integridad de datos
     * Integración con servicios de ventas
+    * API pública sin autenticación requerida
     
-    ## Autenticación
+    ## Endpoints Disponibles
     
-    Usa el endpoint `/auth/login` para obtener un token JWT.
-    Luego incluye el token en el header: `Authorization: Bearer <token>`
-    
-    **Usuarios de prueba:**
-    - Admin: username=`admin`, password=`admin123`
-    - Usuario: username=`user`, password=`user123`
+    Todos los endpoints están disponibles sin necesidad de autenticación.
+    Puedes consultar la documentación interactiva en `/docs` para probar los endpoints.
     """,
     version="1.0.0",
     docs_url="/docs",
@@ -45,7 +40,6 @@ app.add_middleware(
 )
 
 # Incluir routers
-app.include_router(auth_router)
 app.include_router(category_router.router)
 app.include_router(product_router.router)
 
