@@ -40,8 +40,28 @@ pip install -r requirements.txt
 ```
 
 4. Configurar la base de datos:
-   - Crear una base de datos PostgreSQL llamada `tienda_pos`
-   - O usar una base de datos existente (como Render, Railway, etc.)
+   
+   **Opción A: Usar scripts SQL (Recomendado)**
+   ```bash
+   # Crear la base de datos
+   createdb -U postgres tienda_pos
+   
+   # Ejecutar el esquema
+   psql -U postgres -d tienda_pos -f database/schema.sql
+   ```
+   
+   **Opción B: Script Python**
+   ```bash
+   python database/create_database.py
+   ```
+   
+   **Opción C: Scripts automatizados**
+   - Linux/Mac: `./database/create_database.sh`
+   - Windows: `.\database\create_database.ps1`
+   
+   Ver `database/README.md` para más opciones y detalles.
+   
+   **Nota**: También puedes usar una base de datos existente (como Render, Railway, etc.)
 
 5. Configurar variables de entorno:
 ```bash
