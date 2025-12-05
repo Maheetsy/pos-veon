@@ -1,0 +1,126 @@
+### Ejemplos de uso de la API
+### Puedes usar estos ejemplos con extensiones como REST Client en VS Code
+
+### Variables
+@baseUrl = http://localhost:8000
+@token = your-token-here
+
+### 1. Autenticación - Obtener Token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 2. Obtener todas las categorías
+GET {{baseUrl}}/categories/
+Authorization: Bearer {{token}}
+
+### 3. Crear categoría (requiere admin)
+POST {{baseUrl}}/categories/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Nueva Categoría",
+  "description": "Descripción de la categoría"
+}
+
+### 4. Obtener categoría por ID
+GET {{baseUrl}}/categories/1
+Authorization: Bearer {{token}}
+
+### 5. Actualizar categoría (requiere admin)
+PUT {{baseUrl}}/categories/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Categoría Actualizada",
+  "description": "Nueva descripción"
+}
+
+### 6. Eliminar categoría (requiere admin)
+DELETE {{baseUrl}}/categories/1
+Authorization: Bearer {{token}}
+
+### 7. Obtener todos los productos
+GET {{baseUrl}}/products/
+Authorization: Bearer {{token}}
+
+### 8. Buscar productos por nombre
+GET {{baseUrl}}/products/search/query?name=Smartphone
+Authorization: Bearer {{token}}
+
+### 9. Buscar productos por SKU
+GET {{baseUrl}}/products/search/query?sku=ELEC-001
+Authorization: Bearer {{token}}
+
+### 10. Buscar productos por categoría
+GET {{baseUrl}}/products/search/query?category_id=1
+Authorization: Bearer {{token}}
+
+### 11. Obtener producto por ID
+GET {{baseUrl}}/products/1
+Authorization: Bearer {{token}}
+
+### 12. Crear producto (requiere admin)
+POST {{baseUrl}}/products/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Producto de Prueba",
+  "short_description": "Descripción corta",
+  "sku": "TEST-001",
+  "cost": 10.00,
+  "sale_price": 19.99,
+  "stock": 100,
+  "unit": "1",
+  "unit_of_measurement": "unidad",
+  "provider_id": "PROV-001",
+  "provider_name": "Proveedor Test",
+  "image_path": "/images/test.jpg",
+  "category_id": 1
+}
+
+### 13. Actualizar producto (requiere admin)
+PUT {{baseUrl}}/products/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Producto Actualizado",
+  "stock": 150
+}
+
+### 14. Actualizar stock directamente (requiere admin)
+PATCH {{baseUrl}}/products/1/stock
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "stock": 200
+}
+
+### 15. Descontar stock (usado por servicio de ventas)
+POST {{baseUrl}}/products/1/decrease-stock
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### 16. Eliminar producto (requiere admin)
+DELETE {{baseUrl}}/products/1
+Authorization: Bearer {{token}}
+
+### 17. Health Check
+GET {{baseUrl}}/health
+
+### 18. Root
+GET {{baseUrl}}/
+
